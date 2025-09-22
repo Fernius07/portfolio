@@ -61,8 +61,8 @@ Accede a la pagina online — ¡prueba el toggle de tema e idioma!
 
 - Github: [Fernius07yt](https://github.com/Fernius07yt)
 - LinkedIn: [Iñigo Fernández García](https://www.linkedin.com/in/i%C3%B1igo-fernandez-garcia/)
-- Instagram: N/A
-- X (Twitter): N/A
+- Instagram: [fernius.07](https://www.instagram.com/fernius.07)
+- X (Twitter): [fernius07yt](https://x.com/fernius07yt)
 - Discord: [fernius007](https://discord.com/users/614472958773166113)
 
 ***
