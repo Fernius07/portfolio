@@ -1,11 +1,3 @@
-<img src="https://r2cdn.perplexity.ai/pplx-full-logo-primary-dark%402x.png" style="height:64px;margin-right:32px"/>
-
-# Dame el readme que este chulo para Github
-
-Aquí tienes un README moderno y atractivo para tu portfolio en GitHub, adaptado a tu perfil de estudiante de ingeniería informática y con estética hacker elegante, en español e inglés, siguiendo buenas prácticas actuales.[^1][^2][^3]
-
-***
-
 # 🚀 Portfolio - Iñigo Fernández García
 
 **Estudiante de Ingeniería Informática — Bilbao, España**
@@ -115,14 +107,4 @@ MIT — Libre para uso y modificación
 > *Exploring the boundaries of code and digital security.*
 
 ***
-
-Así tu README lucirá profesional y atractivo, ideal para destacar tu portfolio en GitHub.[^2][^1]
-
-<div style="text-align: center">⁂</div>
-
-[^1]: https://templyo.io/blog/17-best-web-developer-portfolio-examples-for-2024
-
-[^2]: https://reallygooddesigns.com/minimalist-portfolio-website/
-
-[^3]: https://github.com/AdityaBhatt3010/AdityaBhatt3010.github.io
 
