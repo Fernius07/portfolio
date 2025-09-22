@@ -44,28 +44,17 @@ Exploro los límites del código y la seguridad digital, creando soluciones inno
 
 ***
 
-## 🧑‍🚀 Deploy Rápido
+## 🌐 Accede ahora
 
-1. Clona el repo y pon los archivos en el root:
-    - `index.html`
-    - `style.css`
-    - `script.js`
-2. Publica gratis en [GitHub Pages](https://pages.github.com/), [Netlify](https://www.netlify.com/) o [Vercel](https://vercel.com/)
-3. ¡Listo para impresionar!
-
-***
-
-## 🌐 Demo
-
-Accede a la demo online — ¡prueba el toggle de tema e idioma!
-[Portfolio Demo](#) <!-- Actualiza este link cuando lo subas -->
+Accede a la pagina online — ¡prueba el toggle de tema e idioma!
+[Portfolio](fernius07yt.github.io/portfolio/) <!-- Actualiza este link cuando lo subas -->
 
 ***
 
 ## ✨ Vista previa
 
 ```
-[Incluye aquí un GIF o imagen de tu portfolio]
+<img width="1919" height="984" alt="image" src="https://github.com/user-attachments/assets/bff9345c-6075-4b61-810c-d5a5c4b4dd42" />
 ```
 
 
@@ -73,19 +62,11 @@ Accede a la demo online — ¡prueba el toggle de tema e idioma!
 
 ## 🔗 Contacto \& Redes
 
-- Github: [TuUsuario](#)
-- LinkedIn: [TuPerfil](#)
+- Github: [Fernius07yt](https://github.com/Fernius07yt)
+- LinkedIn: [Iñigo Fernández García](https://www.linkedin.com/in/i%C3%B1igo-fernandez-garcia/)
 - Instagram: [TuInstagram](#)
 - X (Twitter): [TuUsuario](#)
-- Discord: [TuDiscord](#)
-
-***
-
-## 🤖 Atajos de Teclado
-
-- `Ctrl + Shift + T` — Cambia tema
-- `Ctrl + Shift + L` — Cambia idioma
-- `Esc` — Cierra el menú móvil
+- Discord: [fernius007](https://discord.com/users/614472958773166113)
 
 ***
 
