@@ -53,10 +53,7 @@ Accede a la pagina online — ¡prueba el toggle de tema e idioma!
 
 ## ✨ Vista previa
 
-```
 <img width="1919" height="984" alt="image" src="https://github.com/user-attachments/assets/bff9345c-6075-4b61-810c-d5a5c4b4dd42" />
-```
-
 
 ***
 
@@ -64,8 +61,8 @@ Accede a la pagina online — ¡prueba el toggle de tema e idioma!
 
 - Github: [Fernius07yt](https://github.com/Fernius07yt)
 - LinkedIn: [Iñigo Fernández García](https://www.linkedin.com/in/i%C3%B1igo-fernandez-garcia/)
-- Instagram: [TuInstagram](#)
-- X (Twitter): [TuUsuario](#)
+- Instagram: N/A
+- X (Twitter): N/A
 - Discord: [fernius007](https://discord.com/users/614472958773166113)
 
 ***
