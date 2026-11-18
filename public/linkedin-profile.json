@@ -1,0 +1,135 @@
+{
+  "fullName": "Iñigo Fernández García",
+  "callsign": "CPT. FER-07",
+  "homeAirport": {
+    "iata": "BIO",
+    "icao": "LEBB",
+    "city": "Bilbao, País Vasco, España"
+  },
+  "profileUrl": "https://www.linkedin.com/in/i%C3%B1igo-fernandez-garcia/",
+  "headline": {
+    "es": "Estudiante de Ingeniería Informática (Univ. de Deusto) · Desarrollo Full-Stack, Aviación, IA y Ciberseguridad",
+    "en": "Computer Engineering Student (Univ. of Deusto) · Full-Stack Engineering, Aviation Tech, AI & Cybersecurity"
+  },
+  "summary": {
+    "es": "Estudiante de Ingeniería Informática en la Universidad de Deusto (Bilbao). Construyo aplicaciones web reactivas, herramientas de briefing aéreo, movilidad en tiempo real e integraciones con inteligencia artificial y ciberseguridad.",
+    "en": "Computer Engineering student at the University of Deusto (Bilbao). I build reactive web applications, aviation briefing tools, real-time urban mobility systems, and AI + cybersecurity solutions."
+  },
+  "availability": {
+    "es": "DISPONIBLE PARA PRÁCTICAS / PROYECTOS TECH & AVIATION",
+    "en": "CLEARED FOR INTERNSHIPS / TECH & AVIATION ROLES"
+  },
+  "education": [
+    {
+      "id": "edu-deusto",
+      "period": "2023 — Presente",
+      "airportCode": "LEBB · DEUSTO",
+      "institution": "Universidad de Deusto / University of Deusto",
+      "degree": {
+        "es": "Grado en Ingeniería Informática",
+        "en": "Bachelor's Degree in Computer Engineering"
+      },
+      "focus": {
+        "es": "Diseño del Software, Estructuras de Datos (C/Java), Ingeniería Web, Bases de Datos (SQL/Neo4j/MongoDB), Inteligencia Artificial y Ciberseguridad.",
+        "en": "Software Design, Data Structures (C/Java), Web Engineering, Databases (SQL/Neo4j/MongoDB), Artificial Intelligence & Cybersecurity."
+      },
+      "status": "EN ROUTE"
+    }
+  ],
+  "experience": [
+    {
+      "id": "exp-aviation",
+      "period": "2025 — 2026",
+      "flightTag": "OPS-AERO",
+      "role": {
+        "es": "Creador de Herramientas Web Aeronáuticas (PilotBriefingApp, AeroLink, TreAir)",
+        "en": "Aviation Web Systems Builder (PilotBriefingApp, AeroLink, TreAir)"
+      },
+      "organization": "Proyectos Independientes · Vercel",
+      "highlights": {
+        "es": [
+          "Diseño e implementación de cabinas digitales de briefing prevuelo y paneles operativos.",
+          "Despliegue continuo en Vercel con interfaces reactivas y animaciones de telemetría."
+        ],
+        "en": [
+          "Designed and implemented digital pre-flight briefing cockpits and operational dashboards.",
+          "Continuous deployment on Vercel with reactive interfaces and telemetry motion."
+        ]
+      }
+    },
+    {
+      "id": "exp-mobility",
+      "period": "2024 — 2026",
+      "flightTag": "OPS-MOBILITY",
+      "role": {
+        "es": "Desarrollador Full-Stack — Ecosistema de Movilidad Bizkaia & IA",
+        "en": "Full-Stack Developer — Bizkaia Mobility Ecosystem & AI"
+      },
+      "organization": "Metro-Bilbao, Euskotren-Mapa, Cámaras Bilbao, Trayko",
+      "highlights": {
+        "es": [
+          "Integración de mapas en tiempo real, cámaras viarias y sistemas de navegación inteligente.",
+          "Desarrollo de Trayko (IA + GPS interior + optimización) y plataformas Next.js + PostgreSQL."
+        ],
+        "en": [
+          "Built real-time transit maps, live road camera monitors, and smart navigation workflows.",
+          "Engineered Trayko (AI + indoor GPS + optimization) and Next.js + PostgreSQL web platforms."
+        ]
+      }
+    },
+    {
+      "id": "exp-deusto-ds",
+      "period": "2024 — 2026",
+      "flightTag": "OPS-DEUSTO",
+      "role": {
+        "es": "Arquitectura y Diseño de Software en Equipo (Ecoembes DS-05)",
+        "en": "Team Software Architecture & Engineering (Ecoembes DS-05)"
+      },
+      "organization": "Universidad de Deusto",
+      "highlights": {
+        "es": [
+          "Modelado orientado a objetos en Java, patrones de diseño y desarrollo colaborativo con Git.",
+          "Programación de sistemas de bajo nivel en C (Programación IV, SistemaTransporteBizkaia)."
+        ],
+        "en": [
+          "Object-oriented architecture in Java, design patterns, and collaborative Git workflows.",
+          "Low-level systems programming in C (Programming IV, SistemaTransporteBizkaia)."
+        ]
+      }
+    }
+  ],
+  "skills": [
+    { "name": "React / Next.js", "category": "Cockpit UI", "level": 92 },
+    { "name": "JavaScript / TypeScript", "category": "Flight Controls", "level": 90 },
+    { "name": "Python / Django", "category": "Propulsion", "level": 84 },
+    { "name": "Java / C / C++", "category": "Core Avionics", "level": 85 },
+    { "name": "PostgreSQL / MongoDB / Neo4j / Supabase", "category": "Flight Data", "level": 82 },
+    { "name": "Cybersecurity & Ethical Hacking", "category": "Airspace Defense", "level": 80 },
+    { "name": "Vercel / Git / GitHub Actions", "category": "Ground Control", "level": 90 },
+    { "name": "Aviation Ops & Briefing UX", "category": "Domain Specialty", "level": 94 }
+  ],
+  "certifications": [
+    {
+      "title": { "es": "Diseño del Software & Arquitectura (Java)", "en": "Software Design & Architecture (Java)" },
+      "issuer": "Universidad de Deusto",
+      "year": "2025"
+    },
+    {
+      "title": { "es": "Desarrollo Full-Stack Moderno (Next.js + Postgres + Vercel)", "en": "Modern Full-Stack Web (Next.js + Postgres + Vercel)" },
+      "issuer": "Production Deployments",
+      "year": "2026"
+    },
+    {
+      "title": { "es": "Seguridad Digital & Sistemas Linux", "en": "Digital Security & Linux Systems" },
+      "issuer": "Self-Directed Lab & CTF Practice",
+      "year": "2025"
+    }
+  ],
+  "spokenLanguages": [
+    { "name": { "es": "Español", "en": "Spanish" }, "level": { "es": "Nativo (ICAO L6)", "en": "Native (ICAO L6)" } },
+    { "name": { "es": "Inglés", "en": "English" }, "level": { "es": "Avanzado / Técnico (C1)", "en": "Advanced / Technical (C1)" } },
+    { "name": { "es": "Euskera", "en": "Basque" }, "level": { "es": "Competencia Profesional", "en": "Working Proficiency" } }
+  ],
+  "lastUpdated": "2026-11-18T10:00:00Z",
+  "syncMode": "linked-json"
+}

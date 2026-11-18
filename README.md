@@ -1,88 +1,68 @@
-# 🚀 Portfolio - Iñigo Fernández García [⚠️BETA⚠️]
+# ✈️ Fernius07 — Aviation Flight Deck Portfolio
 
-**Estudiante de Ingeniería Informática — Bilbao, España**
-🖥️ **Interesado en Desarrollo Web \& Ciberseguridad**
-🌗 Hacker elegante, minimalista y moderno
+Portfolio interactivo y animado con temática de aviación para **Iñigo Fernández García (`@Fernius07`)**, construido con **React 19 + Vite + Motion** y componentes oficiales de **[React Bits](https://github.com/DavidHDev/react-bits)**, preparado para desplegar en **Vercel** con sincronización en vivo con **GitHub** y **LinkedIn**.
 
-***
+---
 
-## 👨‍💻 Sobre mí
+## 🧩 Componentes de React Bits Utilizados
+Todos los componentes están integrados en `src/components/react-bits/`:
+- **`Radar`** (`Backgrounds/Radar`) — Radar WebGL2 interactivo con contactos móviles en el Hero.
+- **`SplitFlapText`** (`TextAnimations/SplitFlapText`) — Panel mecánico de aeropuerto (Solari) en el Hero y en el Panel de Salidas (FIDS).
+- **`TearTicket`** (`Micro/TearTicket`) — Tarjeta de embarque física interactiva con talón perforado arrancable para confirmar el embarque / contacto.
+- **`DecryptedText`** (`TextAnimations/DecryptedText`) — Barra METAR aeronáutica con descifrado en tiempo real.
+- **`BlurText`** (`TextAnimations/BlurText`) — Títulos animados con desenfoque progresivo al hacer scroll.
+- **`CountUp`** (`TextAnimations/CountUp`) — Contadores de instrumentación para métricas de GitHub.
+- **`TiltedCard` + `TiltedCardLayer`** (`Components/TiltedCard`) — Tarjetas 3D inclinables con brillo especular y cara trasera técnica para proyectos destacados.
+- **`SpotlightCard`** (`Components/SpotlightCard`) — Tarjetas con haz de luz en la Bahía de Aviónica y Bitácora de LinkedIn.
+- **`Dock`** (`Components/Dock`) — Dock flotante inferior estilo cabina con efecto lupa.
+- **`Magnet`** (`Animations/Magnet`) & **`StarBorder`** (`Animations/StarBorder`) — Botones magnéticos con borde estelar animado.
 
-Hola, soy Iñigo Fernández García.
-Me apasiona la tecnología, el desarrollo web y el universo de la ciberseguridad.
-Exploro los límites del código y la seguridad digital, creando soluciones innovadoras con una visión ética y elegante.
+---
 
-***
+## 🔄 Cómo funciona la sincronización automática (GitHub + LinkedIn)
 
-## ⚡ Tecnologías y Diseño
+### 1. GitHub en Vivo (`api/github.js` + `src/hooks/usePortfolioData.js`)
+- En producción (Vercel), `/api/github` consulta en tiempo real:
+  - `https://api.github.com/users/Fernius07`
+  - `https://api.github.com/users/Fernius07/repos?per_page=100&sort=updated`
+  - `https://api.github.com/users/Fernius07/events/public?per_page=20`
+- Usa caché en el Edge de Vercel (`s-maxage=300, stale-while-revalidate=600`).
+- **Cada vez que creas o actualizas un repositorio en GitHub**, aparece automáticamente como un nuevo vuelo en el **Panel de Salidas (FIDS)**, con su lenguaje, descripción, estrellas y URL de despliegue en vivo (`BOARDING`).
+- *(Opcional recomendado)* Añade la variable de entorno `GITHUB_TOKEN` en Vercel (Project Settings → Environment Variables) para elevar el límite de peticiones de 60/h a 5.000/h.
 
-- **React Bits:** Animaciones, background, cards, toggles y efectos inspirados en esta librería
-- **Tema oscuro/claro:** Switch para alternar y destacar el diseño hacker
-- **Idioma:** Español e Inglés — Toggle dinámico
-- **Responsive:** Diseño adaptable en todos los dispositivos
-- **Terminal vibes:** Tipografía tipo código y detalles de consola
-- **Animaciones:** Efectos de entrada, glitch, partículas Matrix, scroll reveal
+### 2. LinkedIn Sincronizado (`api/linkedin.js` + `public/linkedin-profile.json`)
+Dado que LinkedIn bloquea el scraping público directo sin autenticación, la web soporta **3 modos de actualización automática**:
+1. **API en vivo en Vercel (automático sin editar código)**: Configura en Vercel una de estas variables de entorno:
+   - `PROXYCURL_API_KEY` (conectado a `https://www.linkedin.com/in/i%C3%B1igo-fernandez-garcia/`), **o**
+   - `RAPIDAPI_LINKEDIN_KEY`, **o**
+   - `LINKEDIN_JSON_URL` (URL a un Gist o JSON remoto que actualices cuando quieras).
+2. **GitHub Action Automática (`.github/workflows/sync-profile.yml`)**: Se ejecuta diariamente o manualmente (`workflow_dispatch`) para actualizar `public/linkedin-profile.json` y disparar un nuevo deploy en Vercel.
+3. **Edición directa de `public/linkedin-profile.json`**: Al actualizar este JSON y hacer `git push`, Vercel actualiza tu sección de Bitácora automáticamente.
 
-***
+---
 
-## 📁 Secciones
+## 🚀 Desarrollo Local y Despliegue en Vercel
 
-- **Hero:** Presentación con efecto máquina de escribir y imagen personal
-- **Sobre mí:** Quién soy y mi pasión por la tecnología
-- **Educación:** Timeline académico
-- **Contacto:** Formulario sencillo y enlaces sociales
-- **Proyectos:** Estructura lista para tus futuros trabajos (¡solo visible cuando completes proyectos!)
+```bash
+# 1. Instalar dependencias
+npm install
 
-***
+# 2. Arrancar servidor de desarrollo
+npm run dev
 
-## 🛠️ Personalización
+# 3. Compilar para producción
+npm run build
+```
 
-- Cambia tu email y enlaces sociales en el archivo HTML
-- Añade tu foto donde indique “Imagen será agregada aquí”
-- Activa la sección de proyectos cuando tengas trabajos que mostrar
-- Edita textos y colores fácilmente en el CSS y JS
-
-***
-
-## 🌐 Accede ahora
-
-Accede a la pagina online — ¡prueba el toggle de tema e idioma!
-[Portfolio](fernius07yt.github.io/portfolio/) <!-- Actualiza este link cuando lo subas -->
-
-***
-
-## ✨ Vista previa
-
-<img width="1919" height="984" alt="image" src="https://github.com/user-attachments/assets/bff9345c-6075-4b61-810c-d5a5c4b4dd42" />
-
-***
-
-## 🔗 Contacto \& Redes
-
-- Github: [Fernius07yt](https://github.com/Fernius07yt)
-- LinkedIn: [Iñigo Fernández García](https://www.linkedin.com/in/i%C3%B1igo-fernandez-garcia/)
-- Instagram: [fernius.07](https://www.instagram.com/fernius.07)
-- X (Twitter): [fernius07yt](https://x.com/fernius07yt)
-- Discord: [fernius007](https://discord.com/users/614472958773166113)
-
-***
-
-## 📈 Mejoras Futuras
-
-- Añadir proyectos y certificaciones
-- Integrar formulario de contacto real (Formspree, etc.)
-- Optimizar SEO y performance
-
-***
-
-## 🦾 Licencia
-
-MIT — Libre para uso y modificación
-
-***
-
-> “Explorando los límites del código y la seguridad digital.”
-> *Exploring the boundaries of code and digital security.*
-
-***
-
+### Subir a GitHub y Publicar en Vercel
+1. Crea un repositorio en tu cuenta `https://github.com/Fernius07` (por ejemplo `flight-deck-portfolio`).
+2. Dentro de esta carpeta ejecuta:
+   ```bash
+   git add .
+   git commit -m "feat: initial aviation flight deck portfolio with React Bits"
+   git branch -M main
+   git remote add origin https://github.com/Fernius07/TU-REPO.git
+   git push -u origin main
+   ```
+3. Entra en [vercel.com](https://vercel.com), pulsa **Add New → Project**, importa tu repositorio de GitHub y pulsa **Deploy** (Framework: **Vite**).
+4. *(Opcional)* En Vercel → **Settings → Environment Variables**, añade `GITHUB_TOKEN` y/o `PROXYCURL_API_KEY` / `LINKEDIN_JSON_URL`.
