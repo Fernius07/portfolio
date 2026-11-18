@@ -1,66 +1,63 @@
 import { motion } from 'motion/react';
-import { ArrowDownRight, Compass, GitBranch, Globe, PlaneTakeoff, Star } from 'lucide-react';
+import { ArrowDownRight, Code2, GitBranch, Globe, MapPin, Star, Ticket } from 'lucide-react';
+import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import Radar from './react-bits/Radar/Radar';
 import SplitFlapText from './react-bits/SplitFlapText/SplitFlapText';
-import DecryptedText from './react-bits/DecryptedText/DecryptedText';
 import BlurText from './react-bits/BlurText/BlurText';
 import CountUp from './react-bits/CountUp/CountUp';
 import Magnet from './react-bits/Magnet/Magnet';
 import StarBorder from './react-bits/StarBorder/StarBorder';
+import { LINKEDIN_URL } from '../data/fallbackData';
 
-export default function CockpitHero({ copy, githubUser, telemetry, theme }) {
+export default function CockpitHero({ copy, githubUser, stats, theme }) {
   const scrollTo = (id) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const gauges = [
+  const cards = [
     {
       key: 'repos',
-      icon: <GitBranch size={15} color="#38bdf8" />,
-      code: 'FLT-LOG',
-      value: telemetry.totalRepos,
+      icon: <GitBranch size={16} color="#38bdf8" />,
+      value: stats.totalRepos,
       label: copy.hero.stats.repos,
     },
     {
       key: 'live',
-      icon: <Globe size={15} color="#3ef09a" />,
-      code: 'AIRBORNE',
-      value: telemetry.liveDeployments,
+      icon: <Globe size={16} color="#3ef09a" />,
+      value: stats.liveDemos,
       label: copy.hero.stats.live,
     },
     {
       key: 'stars',
-      icon: <Star size={15} color="#fbbf24" />,
-      code: 'RATING',
-      value: telemetry.totalStars,
+      icon: <Star size={16} color="#fbbf24" />,
+      value: stats.totalStars,
       label: copy.hero.stats.stars,
     },
     {
       key: 'langs',
-      icon: <Compass size={15} color="#a78bfa" />,
-      code: 'AVIONICS',
-      value: telemetry.activeLanguagesCount,
+      icon: <Code2 size={16} color="#a78bfa" />,
+      value: stats.languagesCount,
       label: copy.hero.stats.languages,
     },
   ];
 
   return (
-    <section id="cockpit" className="cockpit-hero">
+    <section id="home" className="cockpit-hero">
       <div className="hero-radar-layer">
         <Radar
           color={theme === 'night' ? '#3ef09a' : '#0284c7'}
           mode="sweep"
-          speed={0.9}
-          trail={0.42}
-          ringCount={6}
-          spokeCount={12}
-          targets={9}
-          clutter={0.28}
-          tilt={22}
-          centerX={0.72}
+          speed={0.75}
+          trail={0.35}
+          ringCount={5}
+          spokeCount={10}
+          targets={6}
+          clutter={0.18}
+          tilt={20}
+          centerX={0.74}
           centerY={0.48}
-          gridOpacity={0.75}
+          gridOpacity={0.55}
           lightMode={theme === 'day'}
         />
       </div>
@@ -68,79 +65,75 @@ export default function CockpitHero({ copy, githubUser, telemetry, theme }) {
 
       <div className="hero-content">
         <motion.div
-          className="hero-tower-pill"
-          initial={{ opacity: 0, y: -16 }}
+          className="hero-profile-pill"
+          initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55 }}
+          transition={{ duration: 0.45 }}
         >
-          <span className="sync-dot" />
-          <span>{copy.hero.badge}</span>
+          {githubUser?.avatar_url && (
+            <img
+              src={githubUser.avatar_url}
+              alt={githubUser.name || 'Fernius07'}
+              width={26}
+              height={26}
+              style={{ borderRadius: '50%', objectFit: 'cover' }}
+            />
+          )}
+          <span>@{githubUser?.login || 'Fernius07'}</span>
+          <span style={{ opacity: 0.4 }}>·</span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: 'var(--text-secondary)' }}>
+            <MapPin size={13} /> Bilbao
+          </span>
         </motion.div>
 
         <motion.div
           className="hero-splitflap-wrap"
-          initial={{ opacity: 0, scale: 0.96 }}
+          initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.65, delay: 0.1 }}
+          transition={{ duration: 0.55, delay: 0.08 }}
         >
           <SplitFlapText
             words={copy.hero.callsigns}
-            fontSize={42}
-            padTo={19}
+            fontSize={40}
+            padTo={15}
             flipDuration={0.09}
             stagger={0.04}
             cycleDelay={2800}
-            flipsPerChar={6}
-            tileColor={theme === 'night' ? '#0d1628' : '#0f172a'}
+            flipsPerChar={5}
+            tileColor="#0f172a"
             textColor="#fbbf24"
             tileRadius={8}
             gap={5}
-            glare={0.25}
+            glare={0.2}
           />
         </motion.div>
 
-        <motion.div
-          className="hero-metar-bar"
-          initial={{ opacity: 0, x: -24 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, delay: 0.25 }}
-        >
-          <DecryptedText
-            text={copy.hero.metar}
-            animateOn="view"
-            sequential
-            revealDirection="start"
-            speed={28}
-            scrambleColor="#fbbf24"
-          />
-        </motion.div>
-
-        <h1 className="hero-headline">
+        <div className="hero-headline">
           <BlurText
             text={copy.hero.headline}
-            delay={70}
+            delay={55}
             animateBy="words"
             direction="top"
             trigger="load"
           />
-        </h1>
+        </div>
 
         <motion.p
           className="hero-subhead"
-          initial={{ opacity: 0, y: 18 }}
+          initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65, delay: 0.45 }}
+          transition={{ duration: 0.5, delay: 0.35 }}
         >
           {copy.hero.subhead}
         </motion.p>
 
         <motion.div
           className="hero-actions"
-          initial={{ opacity: 0, y: 18 }}
+          initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65, delay: 0.58 }}
+          transition={{ duration: 0.5, delay: 0.45 }}
         >
-          <Magnet padding={70} magnetStrength={2.2} scale={1.03}>
+          <Magnet padding={60} magnetStrength={2} scale={1.03}>
             <StarBorder
               as="button"
               type="button"
@@ -151,69 +144,68 @@ export default function CockpitHero({ copy, githubUser, telemetry, theme }) {
               textColor="#03111c"
               duration={3.2}
               radius={12}
-              sparkle
-              onClick={() => scrollTo('boarding')}
+              onClick={() => scrollTo('departures')}
             >
-              <PlaneTakeoff size={18} />
-              <span>{copy.hero.ctaBoarding}</span>
+              <span>{copy.hero.ctaProjects}</span>
+              <ArrowDownRight size={17} />
             </StarBorder>
           </Magnet>
 
-          <Magnet padding={60} magnetStrength={2}>
+          <Magnet padding={55} magnetStrength={2}>
             <button
               type="button"
               className="cockpit-secondary-btn"
-              onClick={() => scrollTo('departures')}
+              onClick={() => scrollTo('boarding')}
             >
-              <span>{copy.hero.ctaDepartures}</span>
-              <ArrowDownRight size={17} />
+              <Ticket size={16} />
+              <span>{copy.hero.ctaBoarding}</span>
             </button>
           </Magnet>
 
-          {githubUser?.avatar_url && (
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.65rem',
-                padding: '0.45rem 0.85rem 0.45rem 0.45rem',
-                borderRadius: '999px',
-                border: '1px solid var(--border-hud)',
-                background: 'var(--bg-card)',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.78rem',
-              }}
+          <div style={{ display: 'inline-flex', gap: '0.55rem' }}>
+            <a
+              href={githubUser?.html_url || 'https://github.com/Fernius07'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hud-icon-btn"
+              style={{ height: '42px', padding: '0 0.85rem', borderRadius: '11px', textDecoration: 'none' }}
+              aria-label="GitHub"
             >
-              <img
-                src={githubUser.avatar_url}
-                alt={githubUser.name || 'Fernius07'}
-                width={30}
-                height={30}
-                style={{ borderRadius: '50%', objectFit: 'cover', border: '1px solid var(--accent-emerald)' }}
-              />
-              <span>@{githubUser.login}</span>
-            </div>
-          )}
+              <FaGithub size={17} />
+              <span>GitHub</span>
+            </a>
+
+            <a
+              href={LINKEDIN_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hud-icon-btn"
+              style={{ height: '42px', padding: '0 0.85rem', borderRadius: '11px', textDecoration: 'none' }}
+              aria-label="LinkedIn"
+            >
+              <FaLinkedin size={17} />
+              <span>LinkedIn</span>
+            </a>
+          </div>
         </motion.div>
 
         <div className="hero-gauges-grid">
-          {gauges.map((g, i) => (
+          {cards.map((card, i) => (
             <motion.div
-              key={g.key}
+              key={card.key}
               className="gauge-card"
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.65 + i * 0.08 }}
-              whileHover={{ y: -4, borderColor: 'rgba(56, 189, 248, 0.5)' }}
+              transition={{ duration: 0.45, delay: 0.55 + i * 0.06 }}
+              whileHover={{ y: -3 }}
             >
               <div className="gauge-top">
-                <span>{g.code}</span>
-                {g.icon}
+                <span className="gauge-label">{card.label}</span>
+                {card.icon}
               </div>
               <div className="gauge-number">
-                <CountUp to={g.value} duration={1.6} trigger="load" />
+                <CountUp to={card.value} duration={1.4} trigger="load" />
               </div>
-              <div className="gauge-label">{g.label}</div>
             </motion.div>
           ))}
         </div>

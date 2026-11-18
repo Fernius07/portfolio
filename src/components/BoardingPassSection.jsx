@@ -1,68 +1,57 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { Check, Copy, ExternalLink, Mail, Plane, Printer, RotateCcw, Scissors, Ticket } from 'lucide-react';
+import { Check, Copy, Mail, Plane, Printer, RotateCcw, Scissors, Ticket } from 'lucide-react';
+import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import TearTicket from './react-bits/TearTicket/TearTicket';
 import BlurText from './react-bits/BlurText/BlurText';
 import StarBorder from './react-bits/StarBorder/StarBorder';
 import { LINKEDIN_URL } from '../data/fallbackData';
 
-export default function BoardingPassSection({ copy, language, linkedin, telemetry }) {
-  const [mode, setMode] = useState('pilot'); // 'pilot' | 'recruiter'
+export default function BoardingPassSection({ copy, language, linkedin, stats }) {
+  const [mode, setMode] = useState('cv'); // 'cv' | 'message'
   const [isTorn, setIsTorn] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const [form, setForm] = useState({
-    passenger: '',
-    company: '',
-    email: '',
-    missionIdx: 0,
-    seatClassIdx: 0,
+    name: '',
+    subject: '',
     message: '',
   });
 
-  const handleField = (key, value) => {
-    setForm((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const selectedMission = copy.boarding.missions[form.missionIdx] || copy.boarding.missions[0];
-  const selectedSeatClass = copy.boarding.classes[form.seatClassIdx] || copy.boarding.classes[0];
-
-  const displayPassenger =
-    mode === 'pilot'
+  const displayName =
+    mode === 'cv'
       ? linkedin.fullName.toUpperCase()
-      : (form.passenger || (language === 'es' ? 'INVITADO / RECLUTADOR' : 'GUEST / RECRUITER')).toUpperCase();
+      : (form.name || (language === 'es' ? 'TU NOMBRE' : 'YOUR NAME')).toUpperCase();
 
   const displayOrg =
-    mode === 'pilot'
-      ? 'DEUSTO ENG · FERNIUS07'
-      : (form.company || (language === 'es' ? 'TU EMPRESA / EQUIPO' : 'YOUR ORGANIZATION')).toUpperCase();
+    mode === 'cv'
+      ? 'UNIV. DE DEUSTO'
+      : (form.subject || (language === 'es' ? 'TU EMPRESA / ASUNTO' : 'COMPANY / SUBJECT')).toUpperCase();
 
-  const displayMission =
-    mode === 'pilot'
-      ? 'FULL-STACK · AI · AVIATION'
-      : selectedMission.toUpperCase();
+  const displayRole =
+    mode === 'cv'
+      ? '@FERNIUS07'
+      : (form.message ? form.message.slice(0, 22) : language === 'es' ? 'CONTACTO DIRECTO' : 'DIRECT MESSAGE').toUpperCase();
 
-  const displaySeat = mode === 'pilot' ? '01A · CPT' : `${selectedSeatClass.slice(0, 5)} · 07F`;
-  const gateCode = mode === 'pilot' ? 'G-07' : 'G-12';
-  const flightCode = mode === 'pilot' ? 'IFG 007' : 'REC 2026';
+  const ticketNumber = mode === 'cv' ? 'IFG-007' : 'MSG-2026';
 
   const summaryText =
-    language === 'es'
-      ? `TARJETA DE EMBARQUE ${flightCode}\nPasajero: ${displayPassenger}\nOrganización: ${displayOrg}\nRuta: BIO (Bilbao) -> WLD (Global)\nMisión: ${displayMission}\nRepositorios GitHub: ${telemetry.totalRepos} (${telemetry.liveDeployments} en vivo)\nLinkedIn: ${LINKEDIN_URL}\nMensaje: ${form.message || 'Solicitando conexión profesional'}`
-      : `BOARDING PASS ${flightCode}\nPassenger: ${displayPassenger}\nOrganization: ${displayOrg}\nRoute: BIO (Bilbao) -> WLD (Global)\nMission: ${displayMission}\nGitHub Repos: ${telemetry.totalRepos} (${telemetry.liveDeployments} live)\nLinkedIn: ${LINKEDIN_URL}\nMessage: ${form.message || 'Requesting professional connection'}`;
+    mode === 'cv'
+      ? `${linkedin.fullName} — ${linkedin.headline[language]}\nGitHub: https://github.com/Fernius07 (${stats.totalRepos} repos)\nLinkedIn: ${LINKEDIN_URL}`
+      : `${form.name || 'Visitante'} (${form.subject || 'Contacto'})\n\n${form.message || ''}`;
 
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(summaryText);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2200);
+      setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Clipboard fallback ignored
+      // Ignore clipboard failure
     }
   };
 
   const mailHref = `mailto:?subject=${encodeURIComponent(
-    `[Flight ${flightCode}] ${displayPassenger} — ${displayOrg}`
+    form.subject ? `[Portfolio] ${form.subject}` : '[Portfolio] Contacto con Iñigo Fernández'
   )}&body=${encodeURIComponent(summaryText)}`;
 
   return (
@@ -71,177 +60,102 @@ export default function BoardingPassSection({ copy, language, linkedin, telemetr
         <div className="section-header">
           <div className="section-eyebrow">
             <Ticket size={14} />
-            <span>{copy.boarding.eyebrow}</span>
+            <span>{copy.contact.eyebrow}</span>
           </div>
           <h2 className="section-title">
-            <BlurText text={copy.boarding.title} animateBy="words" delay={65} />
+            <BlurText text={copy.contact.title} animateBy="words" delay={55} />
           </h2>
-          <p className="section-subtitle">{copy.boarding.subtitle}</p>
+          <p className="section-subtitle">{copy.contact.subtitle}</p>
         </div>
 
         <div className="boarding-grid">
           <motion.div
             className="checkin-kiosk"
-            initial={{ opacity: 0, x: -32 }}
+            initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.25 }}
-            transition={{ duration: 0.6 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.5 }}
           >
             <div className="kiosk-tabs" role="tablist">
               <button
                 type="button"
                 role="tab"
-                aria-selected={mode === 'pilot'}
-                className={`kiosk-tab ${mode === 'pilot' ? 'active' : ''}`}
+                aria-selected={mode === 'cv'}
+                className={`kiosk-tab ${mode === 'cv' ? 'active' : ''}`}
                 onClick={() => {
-                  setMode('pilot');
+                  setMode('cv');
                   setIsTorn(false);
                 }}
               >
-                {copy.boarding.modePilot}
+                {copy.contact.modeCv}
               </button>
               <button
                 type="button"
                 role="tab"
-                aria-selected={mode === 'recruiter'}
-                className={`kiosk-tab ${mode === 'recruiter' ? 'active' : ''}`}
+                aria-selected={mode === 'message'}
+                className={`kiosk-tab ${mode === 'message' ? 'active' : ''}`}
                 onClick={() => {
-                  setMode('recruiter');
+                  setMode('message');
                   setIsTorn(false);
                 }}
               >
-                {copy.boarding.modeRecruiter}
+                {copy.contact.modeMessage}
               </button>
             </div>
 
-            {mode === 'pilot' ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <div
-                  style={{
-                    padding: '1rem',
-                    borderRadius: '12px',
-                    background: 'rgba(56, 189, 248, 0.08)',
-                    border: '1px solid var(--border-hud)',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.82rem',
-                    lineHeight: 1.6,
-                  }}
-                >
-                  <div style={{ color: 'var(--accent-cyan)', fontWeight: 700, marginBottom: '0.4rem' }}>
-                    {linkedin.callsign} · {linkedin.homeAirport.icao}
-                  </div>
-                  <div style={{ color: 'var(--text-primary)', fontWeight: 600 }}>
-                    {linkedin.headline[language]}
-                  </div>
-                  <div style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
-                    {linkedin.availability[language]}
-                  </div>
+            {mode === 'cv' ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                <div style={{ fontWeight: 700, fontSize: '1.1rem' }}>{linkedin.fullName}</div>
+                <div style={{ color: 'var(--accent-cyan)', fontSize: '0.92rem' }}>
+                  {linkedin.headline[language]}
                 </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-                  <div
-                    style={{
-                      padding: '0.85rem',
-                      borderRadius: '12px',
-                      border: '1px solid var(--border-hud)',
-                      background: 'rgba(15, 23, 42, 0.35)',
-                    }}
-                  >
-                    <div className="bp-meta-label">GITHUB OPS</div>
-                    <div style={{ fontWeight: 700, fontSize: '1.1rem', color: 'var(--accent-emerald)' }}>
-                      {telemetry.totalRepos} Repos · {telemetry.liveDeployments} Live
-                    </div>
-                  </div>
-                  <div
-                    style={{
-                      padding: '0.85rem',
-                      borderRadius: '12px',
-                      border: '1px solid var(--border-hud)',
-                      background: 'rgba(15, 23, 42, 0.35)',
-                    }}
-                  >
-                    <div className="bp-meta-label">HOME BASE</div>
-                    <div style={{ fontWeight: 700, fontSize: '1.1rem', color: 'var(--accent-amber)' }}>
-                      BIO · Bilbao (ES)
-                    </div>
-                  </div>
-                </div>
-
-                <p style={{ margin: 0, fontSize: '0.93rem', color: 'var(--text-secondary)', lineHeight: 1.55 }}>
+                <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.55 }}>
                   {linkedin.summary[language]}
                 </p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.55rem', marginTop: '0.25rem' }}>
+                  <span className="clean-chip">GitHub: {stats.totalRepos} repos</span>
+                  <span className="clean-chip">Bilbao, España</span>
+                </div>
               </div>
             ) : (
-              <div className="kiosk-form-grid">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
                 <div className="kiosk-field">
-                  <label htmlFor="bp-name">{copy.boarding.passengerLabel}</label>
+                  <label htmlFor="bp-name">{copy.contact.nameLabel}</label>
                   <input
                     id="bp-name"
                     type="text"
                     className="kiosk-input"
-                    placeholder="Elena Vance"
-                    value={form.passenger}
-                    onChange={(e) => handleField('passenger', e.target.value)}
+                    placeholder="Alex"
+                    value={form.name}
+                    onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
                   />
                 </div>
 
                 <div className="kiosk-field">
-                  <label htmlFor="bp-company">{copy.boarding.companyLabel}</label>
+                  <label htmlFor="bp-subject">{copy.contact.subjectLabel}</label>
                   <input
-                    id="bp-company"
+                    id="bp-subject"
                     type="text"
                     className="kiosk-input"
-                    placeholder="Airbus / Vercel / Studio"
-                    value={form.company}
-                    onChange={(e) => handleField('company', e.target.value)}
+                    placeholder={language === 'es' ? 'Colaboración / Oferta' : 'Collaboration / Role'}
+                    value={form.subject}
+                    onChange={(e) => setForm((p) => ({ ...p, subject: e.target.value }))}
                   />
                 </div>
 
                 <div className="kiosk-field">
-                  <label htmlFor="bp-mission">{copy.boarding.missionLabel}</label>
-                  <select
-                    id="bp-mission"
-                    className="kiosk-select"
-                    value={form.missionIdx}
-                    onChange={(e) => handleField('missionIdx', Number(e.target.value))}
-                  >
-                    {copy.boarding.missions.map((m, idx) => (
-                      <option key={idx} value={idx}>
-                        {m}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="kiosk-field">
-                  <label htmlFor="bp-seat">{copy.boarding.seatLabel}</label>
-                  <select
-                    id="bp-seat"
-                    className="kiosk-select"
-                    value={form.seatClassIdx}
-                    onChange={(e) => handleField('seatClassIdx', Number(e.target.value))}
-                  >
-                    {copy.boarding.classes.map((c, idx) => (
-                      <option key={idx} value={idx}>
-                        {c}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="kiosk-field full">
-                  <label htmlFor="bp-msg">{copy.boarding.messageLabel}</label>
+                  <label htmlFor="bp-msg">{copy.contact.messageLabel}</label>
                   <textarea
                     id="bp-msg"
-                    rows={2}
+                    rows={3}
                     className="kiosk-textarea"
                     placeholder={
                       language === 'es'
-                        ? 'Describe el proyecto, puesto o idea y luego arranca el talón...'
-                        : 'Describe the role, project or idea, then tear the boarding stub...'
+                        ? 'Escribe tu mensaje y arranca el talón...'
+                        : 'Write your message and tear the stub...'
                     }
                     value={form.message}
-                    onChange={(e) => handleField('message', e.target.value)}
+                    onChange={(e) => setForm((p) => ({ ...p, message: e.target.value }))}
                   />
                 </div>
               </div>
@@ -250,46 +164,40 @@ export default function BoardingPassSection({ copy, language, linkedin, telemetr
 
           <motion.div
             className="boarding-stage"
-            initial={{ opacity: 0, x: 32 }}
+            initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.25 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.08 }}
           >
             <div className="boarding-ticket-shell">
               <TearTicket
-                width={620}
-                height={272}
-                stubSize={178}
+                width={600}
+                height={264}
+                stubSize={170}
                 torn={isTorn}
                 onTear={() => setIsTorn(true)}
                 background="#0c1526"
                 stubBackground="#121d33"
                 color="#f8fafc"
-                borderColor="rgba(56, 189, 248, 0.36)"
-                rotate={1.5}
-                tiltMax={7}
-                ariaLabel={copy.boarding.tearPrompt}
+                borderColor="rgba(56, 189, 248, 0.35)"
+                rotate={1.2}
+                tiltMax={6}
+                ariaLabel={copy.contact.tearHint}
                 stub={
                   <div className="bp-stub">
                     <div>
                       <div className="bp-meta-label" style={{ color: '#fbbf24' }}>
-                        BOARDING STUB
+                        PASS
                       </div>
-                      <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', color: '#f8fafc' }}>
-                        {flightCode}
+                      <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.35rem', color: '#f8fafc' }}>
+                        {ticketNumber}
                       </div>
                     </div>
 
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                      <div>
-                        <div className="bp-meta-label">SEAT</div>
-                        <div className="bp-meta-val" style={{ color: '#3ef09a' }}>
-                          {displaySeat}
-                        </div>
-                      </div>
-                      <div>
-                        <div className="bp-meta-label">GATE</div>
-                        <div className="bp-meta-val">{gateCode}</div>
+                    <div>
+                      <div className="bp-meta-label">GATE</div>
+                      <div className="bp-meta-val" style={{ color: '#3ef09a' }}>
+                        BIO-07
                       </div>
                     </div>
 
@@ -315,15 +223,15 @@ export default function BoardingPassSection({ copy, language, linkedin, telemetr
                   <div className="bp-header">
                     <div className="bp-airline">
                       <Plane size={15} />
-                      <span>FERNIUS AIRWAYS // {flightCode}</span>
+                      <span>IÑIGO FERNÁNDEZ // {ticketNumber}</span>
                     </div>
-                    <span className="bp-class-badge">{displaySeat}</span>
+                    <span className="bp-class-badge">@FERNIUS07</span>
                   </div>
 
                   <div className="bp-route">
                     <div>
                       <div className="bp-airport-code">BIO</div>
-                      <div className="bp-airport-city">BILBAO · LEBB</div>
+                      <div className="bp-airport-city">BILBAO, ES</div>
                     </div>
 
                     <div className="bp-plane-divider">
@@ -333,39 +241,31 @@ export default function BoardingPassSection({ copy, language, linkedin, telemetr
                     </div>
 
                     <div style={{ textAlign: 'right' }}>
-                      <div className="bp-airport-code">WLD</div>
-                      <div className="bp-airport-city">REMOTE / GLOBAL</div>
+                      <div className="bp-airport-code">GLOBAL</div>
+                      <div className="bp-airport-city">REMOTE / ON-SITE</div>
                     </div>
                   </div>
 
-                  <div className="bp-meta-row">
+                  <div className="bp-meta-row" style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' }}>
                     <div className="bp-meta-item">
                       <span className="bp-meta-label">PASSENGER</span>
-                      <span className="bp-meta-val">{displayPassenger}</span>
+                      <span className="bp-meta-val">{displayName}</span>
                     </div>
                     <div className="bp-meta-item">
-                      <span className="bp-meta-label">CARRIER</span>
+                      <span className="bp-meta-label">ORGANIZATION</span>
                       <span className="bp-meta-val">{displayOrg}</span>
                     </div>
                     <div className="bp-meta-item">
-                      <span className="bp-meta-label">MISSION</span>
+                      <span className="bp-meta-label">DETAIL</span>
                       <span className="bp-meta-val" style={{ color: '#38bdf8' }}>
-                        {displayMission}
-                      </span>
-                    </div>
-                    <div className="bp-meta-item">
-                      <span className="bp-meta-label">STATUS</span>
-                      <span className="bp-meta-val" style={{ color: '#3ef09a' }}>
-                        {isTorn ? 'BOARDED ✓' : 'READY'}
+                        {displayRole}
                       </span>
                     </div>
                   </div>
 
                   <div className="bp-footer-note">
-                    <span>SEQ 007 · DEUSTO ENG</span>
-                    <span>
-                      GITHUB: {telemetry.totalRepos} FLTS · LINKEDIN SYNCED
-                    </span>
+                    <span>UNIVERSIDAD DE DEUSTO</span>
+                    <span>{isTorn ? 'CONFIRMED ✓' : `${stats.totalRepos} REPOS · LINKEDIN`}</span>
                   </div>
                 </div>
               </TearTicket>
@@ -374,64 +274,59 @@ export default function BoardingPassSection({ copy, language, linkedin, telemetr
             {!isTorn ? (
               <div className="tear-hint-pill">
                 <Scissors size={14} />
-                <span>{copy.boarding.tearPrompt}</span>
+                <span>{copy.contact.tearHint}</span>
               </div>
             ) : (
               <motion.div
                 className="boarded-actions"
-                initial={{ opacity: 0, y: 12 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
               >
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    flexWrap: 'wrap',
-                    gap: '0.5rem',
-                  }}
-                >
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.82rem',
-                      fontWeight: 700,
-                      color: 'var(--accent-emerald)',
-                    }}
-                  >
-                    {copy.boarding.boardedBanner}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', fontWeight: 700, color: 'var(--accent-emerald)' }}>
+                    {copy.contact.confirmed}
                   </span>
-
-                  <button
-                    type="button"
-                    className="hud-icon-btn"
-                    onClick={() => setIsTorn(false)}
-                  >
+                  <button type="button" className="hud-icon-btn" onClick={() => setIsTorn(false)}>
                     <RotateCcw size={13} />
-                    <span>{copy.boarding.resetTicket}</span>
+                    <span>{copy.contact.reset}</span>
                   </button>
                 </div>
 
                 <div className="boarded-btn-row">
                   <StarBorder
                     as="a"
-                    href={LINKEDIN_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href={mailHref}
                     className="fids-link-btn live"
                     color="#3ef09a"
-                    backgroundColor="rgba(16, 185, 129, 0.18)"
+                    backgroundColor="rgba(16, 185, 129, 0.16)"
                     textColor="var(--accent-emerald)"
                     radius={8}
                     style={{ padding: '0.55rem 0.9rem', fontSize: '0.78rem' }}
                   >
-                    <ExternalLink size={14} />
-                    <span>{copy.boarding.openLinkedin}</span>
+                    <Mail size={14} />
+                    <span>{copy.contact.sendMail}</span>
                   </StarBorder>
 
-                  <a href={mailHref} className="fids-link-btn repo" style={{ padding: '0.55rem 0.9rem' }}>
-                    <Mail size={14} />
-                    <span>{copy.boarding.sendMail}</span>
+                  <a
+                    href={LINKEDIN_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="fids-link-btn repo"
+                    style={{ padding: '0.55rem 0.9rem' }}
+                  >
+                    <FaLinkedin size={14} />
+                    <span>LinkedIn</span>
+                  </a>
+
+                  <a
+                    href="https://github.com/Fernius07"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="fids-link-btn repo"
+                    style={{ padding: '0.55rem 0.9rem' }}
+                  >
+                    <FaGithub size={14} />
+                    <span>GitHub</span>
                   </a>
 
                   <button
@@ -441,7 +336,7 @@ export default function BoardingPassSection({ copy, language, linkedin, telemetr
                     style={{ height: 'auto', padding: '0.5rem 0.85rem' }}
                   >
                     {copied ? <Check size={14} color="#3ef09a" /> : <Copy size={14} />}
-                    <span>{copied ? copy.boarding.copied : copy.boarding.copyPass}</span>
+                    <span>{copied ? copy.contact.copied : copy.contact.copy}</span>
                   </button>
 
                   <button
@@ -451,7 +346,7 @@ export default function BoardingPassSection({ copy, language, linkedin, telemetr
                     style={{ height: 'auto', padding: '0.5rem 0.85rem' }}
                   >
                     <Printer size={14} />
-                    <span>{copy.boarding.printPass}</span>
+                    <span>{copy.contact.printCv}</span>
                   </button>
                 </div>
               </motion.div>

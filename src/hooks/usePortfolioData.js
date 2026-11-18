@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  FALLBACK_GITHUB_EVENTS,
   FALLBACK_GITHUB_REPOS,
   FALLBACK_GITHUB_USER,
   FALLBACK_LINKEDIN_PROFILE,
@@ -8,7 +7,7 @@ import {
   REPO_CURATED_META,
 } from '../data/fallbackData';
 
-const CACHE_KEY = 'fernius07_aviation_telemetry_v1';
+const CACHE_KEY = 'fernius07_portfolio_v2';
 const CACHE_TTL_MS = 5 * 60 * 1000;
 
 function readStorageCache() {
@@ -37,56 +36,40 @@ function writeStorageCache(payload) {
   }
 }
 
-function deriveFlightStatus(repo) {
-  const hasHomepage = Boolean(repo.homepage && repo.homepage.trim().length > 0);
-  if (hasHomepage) return 'BOARDING';
-
-  const updatedMs = repo.updated_at ? new Date(repo.updated_at).getTime() : 0;
-  const ageDays = (Date.now() - updatedMs) / (1000 * 60 * 60 * 24);
-  if (ageDays <= 45) return 'IN FLIGHT';
-  return 'LANDED';
-}
-
-function buildFlightRecord(repo, index, language) {
+function buildProjectRecord(repo, index, language) {
   const meta = REPO_CURATED_META[repo.name];
-  const flightCode = meta?.flightCode || `IFG-${String(800 + index).padStart(3, '0')}`;
-  const status = deriveFlightStatus(repo);
-  const sector = meta?.sector || (repo.language === 'Python' || repo.language === 'TypeScript' ? 'fullstack' : 'utilities');
+  const hasHomepage = Boolean(repo.homepage && repo.homepage.trim().length > 0);
+  const code = meta?.code || `PRJ-${String(index + 1).padStart(2, '0')}`;
+  const isFeatured = Boolean(meta?.featured || hasHomepage || (repo.stargazers_count || 0) > 0);
 
   const liveDesc = repo.description && repo.description.trim().length > 0 ? repo.description.trim() : null;
   const fallbackDesc = meta ? meta[language] || meta.en : null;
   const autoDesc =
     language === 'es'
-      ? `Proyecto ${repo.language || 'Software'} sincronizado en vivo desde GitHub.`
-      : `${repo.language || 'Software'} repository synced live from GitHub.`;
+      ? `Proyecto ${repo.language || 'de software'} en GitHub.`
+      : `${repo.language || 'Software'} project on GitHub.`;
 
-  const remarks = liveDesc || fallbackDesc || autoDesc;
-  const destCode = meta?.destCode || `${(repo.language || 'DEV').slice(0, 3).toUpperCase()} → GH`;
-
+  const summary = liveDesc || fallbackDesc || autoDesc;
   const tags = Array.from(
     new Set([...(Array.isArray(repo.topics) ? repo.topics : []), ...(meta?.tags || []), repo.language].filter(Boolean))
   ).slice(0, 4);
 
   return {
     ...repo,
-    flightCode,
-    status,
-    sector,
-    destCode,
-    remarks,
+    code,
+    hasHomepage,
+    isFeatured,
+    summary,
     tags,
-    gate: (repo.language || 'CORE').slice(0, 4).toUpperCase(),
   };
 }
 
 export function usePortfolioData(language) {
   const [githubUser, setGithubUser] = useState(FALLBACK_GITHUB_USER);
   const [rawRepos, setRawRepos] = useState(FALLBACK_GITHUB_REPOS);
-  const [events, setEvents] = useState(FALLBACK_GITHUB_EVENTS);
   const [linkedin, setLinkedin] = useState(FALLBACK_LINKEDIN_PROFILE);
   const [syncSource, setSyncSource] = useState('fallback');
   const [loading, setLoading] = useState(true);
-  const [lastSynced, setLastSynced] = useState(() => new Date().toISOString());
 
   const fetchAll = useCallback(async (force = false) => {
     if (force) setLoading(true);
@@ -96,10 +79,8 @@ export function usePortfolioData(language) {
       if (cached) {
         if (cached.user) setGithubUser(cached.user);
         if (cached.repos?.length) setRawRepos(cached.repos);
-        if (cached.events?.length) setEvents(cached.events);
         if (cached.linkedin) setLinkedin(cached.linkedin);
         setSyncSource('cached');
-        setLastSynced(new Date(cached.timestamp).toISOString());
         setLoading(false);
         return;
       }
@@ -107,11 +88,9 @@ export function usePortfolioData(language) {
 
     let nextUser = null;
     let nextRepos = null;
-    let nextEvents = null;
     let nextLinkedin = null;
     let liveSuccess = false;
 
-    // 1. Try Vercel Serverless GitHub API first (/api/github)
     try {
       const apiRes = await fetch('/api/github');
       const contentType = apiRes.headers.get('content-type') || '';
@@ -120,26 +99,22 @@ export function usePortfolioData(language) {
         if (data?.user && Array.isArray(data?.repos)) {
           nextUser = data.user;
           nextRepos = data.repos;
-          nextEvents = data.events || [];
           liveSuccess = true;
         }
       }
     } catch {
-      // Fallback to direct GitHub REST API when running locally under Vite dev
+      // Fall back to direct GitHub REST API locally
     }
 
-    // 2. Fallback to direct public GitHub API (for `vite dev` or GitHub Pages)
     if (!liveSuccess) {
       try {
-        const [uRes, rRes, eRes] = await Promise.all([
+        const [uRes, rRes] = await Promise.all([
           fetch(`https://api.github.com/users/${GITHUB_USERNAME}`),
           fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`),
-          fetch(`https://api.github.com/users/${GITHUB_USERNAME}/events/public?per_page=15`),
         ]);
         if (uRes.ok && rRes.ok) {
           nextUser = await uRes.json();
           nextRepos = await rRes.json();
-          nextEvents = eRes.ok ? await eRes.json() : FALLBACK_GITHUB_EVENTS;
           liveSuccess = true;
         }
       } catch {
@@ -147,7 +122,6 @@ export function usePortfolioData(language) {
       }
     }
 
-    // 3. Fetch LinkedIn sync endpoint (/api/linkedin -> /linkedin-profile.json)
     try {
       const liRes = await fetch('/api/linkedin');
       const ct = liRes.headers.get('content-type') || '';
@@ -155,16 +129,12 @@ export function usePortfolioData(language) {
         nextLinkedin = await liRes.json();
       } else {
         const localRes = await fetch('/linkedin-profile.json');
-        if (localRes.ok) {
-          nextLinkedin = await localRes.json();
-        }
+        if (localRes.ok) nextLinkedin = await localRes.json();
       }
     } catch {
       try {
         const localRes = await fetch('/linkedin-profile.json');
-        if (localRes.ok) {
-          nextLinkedin = await localRes.json();
-        }
+        if (localRes.ok) nextLinkedin = await localRes.json();
       } catch {
         // Keep fallback LinkedIn object
       }
@@ -172,14 +142,12 @@ export function usePortfolioData(language) {
 
     if (nextUser) setGithubUser(nextUser);
     if (Array.isArray(nextRepos) && nextRepos.length > 0) setRawRepos(nextRepos);
-    if (Array.isArray(nextEvents) && nextEvents.length > 0) setEvents(nextEvents);
     if (nextLinkedin) setLinkedin(nextLinkedin);
 
     if (liveSuccess) {
       writeStorageCache({
         user: nextUser,
         repos: nextRepos,
-        events: nextEvents,
         linkedin: nextLinkedin || FALLBACK_LINKEDIN_PROFILE,
       });
       setSyncSource('live');
@@ -187,7 +155,6 @@ export function usePortfolioData(language) {
       setSyncSource('fallback');
     }
 
-    setLastSynced(new Date().toISOString());
     setLoading(false);
   }, []);
 
@@ -201,7 +168,7 @@ export function usePortfolioData(language) {
     };
   }, [fetchAll]);
 
-  const flights = useMemo(() => {
+  const projects = useMemo(() => {
     const sorted = [...rawRepos].sort((a, b) => {
       const aLive = a.homepage ? 1 : 0;
       const bLive = b.homepage ? 1 : 0;
@@ -210,19 +177,17 @@ export function usePortfolioData(language) {
       if (starDiff !== 0) return starDiff;
       return new Date(b.updated_at || 0).getTime() - new Date(a.updated_at || 0).getTime();
     });
-    return sorted.map((repo, idx) => buildFlightRecord(repo, idx, language));
+    return sorted.map((repo, idx) => buildProjectRecord(repo, idx, language));
   }, [rawRepos, language]);
 
-  const telemetry = useMemo(() => {
+  const stats = useMemo(() => {
     const langCounts = {};
     let totalStars = 0;
-    let totalForks = 0;
-    let liveCount = 0;
+    let liveDemos = 0;
 
     rawRepos.forEach((repo) => {
       totalStars += repo.stargazers_count || 0;
-      totalForks += repo.forks_count || 0;
-      if (repo.homepage && repo.homepage.trim()) liveCount += 1;
+      if (repo.homepage && repo.homepage.trim()) liveDemos += 1;
       if (repo.language) {
         langCounts[repo.language] = (langCounts[repo.language] || 0) + 1;
       }
@@ -239,23 +204,20 @@ export function usePortfolioData(language) {
 
     return {
       totalRepos: githubUser.public_repos || rawRepos.length,
-      liveDeployments: liveCount,
+      liveDemos,
       totalStars,
-      totalForks,
-      activeLanguagesCount: languages.length,
+      languagesCount: languages.length,
       languages,
     };
   }, [githubUser, rawRepos]);
 
   return {
     githubUser,
-    flights,
-    events,
+    projects,
     linkedin,
-    telemetry,
+    stats,
     syncSource,
     loading,
-    lastSynced,
     refreshData: () => fetchAll(true),
   };
 }
