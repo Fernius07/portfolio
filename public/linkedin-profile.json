@@ -41,16 +41,69 @@
     }
   ],
   "spokenLanguages": [
-    { "name": { "es": "Español", "en": "Spanish" }, "level": { "es": "Nativo", "en": "Native" } },
-    { "name": { "es": "Inglés", "en": "English" }, "level": { "es": "Avanzado (C1)", "en": "Advanced (C1)" } },
-    { "name": { "es": "Euskera", "en": "Basque" }, "level": { "es": "Profesional", "en": "Professional" } }
+    {
+      "name": {
+        "es": "Español",
+        "en": "Spanish"
+      },
+      "level": {
+        "es": "Nativo",
+        "en": "Native"
+      }
+    },
+    {
+      "name": {
+        "es": "Inglés",
+        "en": "English"
+      },
+      "level": {
+        "es": "Avanzado (C1)",
+        "en": "Advanced (C1)"
+      }
+    },
+    {
+      "name": {
+        "es": "Euskera",
+        "en": "Basque"
+      },
+      "level": {
+        "es": "Profesional",
+        "en": "Professional"
+      }
+    }
   ],
   "techStack": {
-    "frontend": ["React", "Next.js", "TypeScript", "JavaScript", "HTML5", "CSS3"],
-    "backend": ["Node.js", "Python", "Django", "Java", "C", "C++"],
-    "databases": ["PostgreSQL", "Supabase", "MySQL", "MongoDB", "Neo4j"],
-    "tools": ["Git", "GitHub", "Vercel", "Linux", "Figma"]
+    "frontend": [
+      "React",
+      "Next.js",
+      "TypeScript",
+      "JavaScript",
+      "HTML5",
+      "CSS3"
+    ],
+    "backend": [
+      "Node.js",
+      "Python",
+      "Django",
+      "Java",
+      "C",
+      "C++"
+    ],
+    "databases": [
+      "PostgreSQL",
+      "Supabase",
+      "MySQL",
+      "MongoDB",
+      "Neo4j"
+    ],
+    "tools": [
+      "Git",
+      "GitHub",
+      "Vercel",
+      "Linux",
+      "Figma"
+    ]
   },
-  "lastUpdated": "2026-11-18T12:00:00Z",
+  "lastUpdated": "2026-11-19T15:14:46.658Z",
   "syncMode": "linked-json"
 }
